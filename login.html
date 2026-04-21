@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - STORA</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-box {
+            background: rgb(67, 123, 171);
+            padding: 30px;
+            border-radius: 10px;
+            width: 320px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: gray;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 15px;
+            background: #4facfe;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #007bff;
+        }
+
+        .error {
+            color: red;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+    </style>
+    <style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(135deg, #4facfe, #00f2fe);
+        height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-box {
+        background: rgb(44, 80, 165);
+        padding: 30px;
+        border-radius: 10px;
+        width: 320px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        text-align: center;
+    }
+
+    /* 🔥 TAMBAHKAN DI SINI */
+    .logo {
+        width: 100px; /* ubah angka ini untuk ganti ukuran */
+        display: block;
+        margin: 0 auto 10px;
+    }
+
+</style>
+</head>
+
+<body>
+
+<div class="login-box">
+    <img src="img/logo.png" class="logo">
+    <h2>STORA</h2>
+    <p>Manajemen Pergudangan</p>
+
+    <input type="text" id="username" placeholder="username">
+<input type="password" id="password" placeholder="password">
+
+    <button onclick="login()">Login</button>
+
+    <div class="error" id="error"></div>
+</div>
+
+<script>
+    function login() {
+        let user = document.getElementById("username").value;
+        let pass = document.getElementById("password").value;
+
+        // login sederhana (bisa diganti backend nanti)
+        if(user === "admin" && pass === "123") {
+        window.location.href = "dashboard.html";
+        } else {
+            document.getElementById("error").innerText = "Username atau Password salah!";
+        }
+    }
+</script>
+
+</body>
+</html>

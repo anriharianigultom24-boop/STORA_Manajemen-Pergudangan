@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>STORA Dashboard</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f4f6f9;
+}
+    /* SIDEBAR */
+.sidebar {
+    position: fixed;
+    width: 220px;
+    height: 100%;
+    background: linear-gradient(to bottom, #1e3c72, #2a5298);
+    padding-top: 20px;
+    color: white;
+}
+
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 15px 20px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.sidebar a.active {
+    background: white;
+    color: #2a5298;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+/* ========================= */
+/* 🔥 INI NO 3 (GESER KONTEN) */
+/* ========================= */
+.container {
+    margin-left: 240px;
+    padding: 20px;
+}
+
+header {
+    margin-left: 240px;
+    background: #314a65;
+    color: white;
+    padding: 15px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.card {
+    display: inline-block;
+    width: 220px;
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    color: white;
+}
+
+.stok { background: #17a2b8; }
+.masuk { background: #28a745; }
+.keluar { background: #dc3545; }
+
+input {
+    padding: 8px;
+    margin: 5px;
+}
+
+button {
+    padding: 8px 12px;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-masuk { background: #28a745; }
+.btn-keluar { background: #dc3545; }
+.btn-hapus { background: orange; }
+.btn-reset { background: black; }
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: collapse;
+    background: white;
+}
+
+th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background: #007bff;
+    color: white;
+}
+
+.warning {
+    color: red;
+    font-weight: bold;
+}
+</style>
+</head>
+
+<body>
+<div class="sidebar">
+    <h2 class="logo">STORA</h2>
+
+    <a href="#">Dashboard</a>
+    <a href="#">Input</a>
+    <a href="#">Monitoring</a>
+    <a href="#">About Us</a>
+    <a href="javascript:void(0)" onclick="logout()">Logout</a>
+</div>
+
+<header>
+    STORA - Manajemen Pergudangan
+</header>
+
+<div class="container">
+
+    <!-- CARD -->
+    <div class="card stok">
+        <h3>Stok</h3>
+        <h2 id="stok">0</h2>
+    </div>
+
+    <div class="card masuk">
+        <h3>Masuk</h3>
+        <h2 id="masuk">0</h2>
+    </div>
+
+    <div class="card keluar">
+        <h3>Keluar</h3>
+        <h2 id="keluar">0</h2>
+    </div>
+
+    <!-- INPUT -->
+    <h3>Input Barang</h3>
+    <input type="text" id="nama" placeholder="Nama Barang">
+    <input type="number" id="jumlah" placeholder="Jumlah">
+
+    <button class="btn-masuk" onclick="barangMasuk()">Masuk</button>
+    <button class="btn-keluar" onclick="barangKeluar()">Keluar</button>
+    <button class="btn-reset" onclick="resetData()">Reset</button>
+
+    <p id="notif" class="warning"></p>
+
+    <!-- TABEL -->
+    <h3>Riwayat</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Nama</th>
+                <th>Jumlah</th>
+                <th>Status</th>
+                <th>Tanggal</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody id="tabel"></tbody>
+    </table>
+
+    <!-- LAPORAN -->
+    <h3>Laporan</h3>
+    <p>Total Masuk: <b id="lapMasuk">0</b></p>
+    <p>Total Keluar: <b id="lapKeluar">0</b></p>
+    <h3>Grafik Barang</h3>
+<canvas id="myChart" height="100"></canvas>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js/dist/chart.umd.min.js"></script>
+
+<script>
+    let chart;
+
+function buatGrafik() {
+    const ctx = document.getElementById("myChart");
+
+    if (!ctx) return;
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Barang Masuk', 'Barang Keluar'],
+            datasets: [{
+                label: 'Jumlah',
+                data: [data.masuk, data.keluar],
+                backgroundColor: [
+                    'green',
+                    'red'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true
+                }
+            }
+        }
+    });
+}
+let data = JSON.parse(localStorage.getItem("storaData")) || {
+    stok: 0,
+    masuk: 0,
+    keluar: 0,
+    riwayat: []
+};
+
+function simpan() {
+    localStorage.setItem("storaData", JSON.stringify(data));
+}
+
+function update() {
+    document.getElementById("stok").innerText = data.stok;
+    document.getElementById("masuk").innerText = data.masuk;
+    document.getElementById("keluar").innerText = data.keluar;
+
+    document.getElementById("lapMasuk").innerText = data.masuk;
+    document.getElementById("lapKeluar").innerText = data.keluar;
+
+    // notif
+    if (data.stok <= 5) {
+        document.getElementById("notif").innerText = "⚠ Stok menipis!";
+    } else {
+        document.getElementById("notif").innerText = "";
+    }
+
+    tampilkanTabel();
+
+    buatGrafik();
+}
+
+function barangMasuk() {
+    let nama = document.getElementById("nama").value;
+    let jumlah = parseInt(document.getElementById("jumlah").value);
+
+    if (!nama || !jumlah) return alert("Isi data!");
+
+    data.stok += jumlah;
+    data.masuk += jumlah;
+
+    tambahRiwayat(nama, jumlah, "Masuk");
+}
+
+function barangKeluar() {
+    let nama = document.getElementById("nama").value;
+    let jumlah = parseInt(document.getElementById("jumlah").value);
+
+    if (!nama || !jumlah) return alert("Isi data!");
+
+    if (jumlah > data.stok) return alert("Stok tidak cukup!");
+
+    data.stok -= jumlah;
+    data.keluar += jumlah;
+
+    tambahRiwayat(nama, jumlah, "Keluar");
+}
+
+function tambahRiwayat(nama, jumlah, status) {
+    let tanggal = new Date().toLocaleString();
+
+    data.riwayat.push({ nama, jumlah, status, tanggal });
+
+    simpan();
+    update();
+}
+
+function tampilkanTabel() {
+    let html = "";
+
+    data.riwayat.forEach((item, index) => {
+        html += `
+        <tr>
+            <td>${item.nama}</td>
+            <td>${item.jumlah}</td>
+            <td>${item.status}</td>
+            <td>${item.tanggal}</td>
+            <td><button class="btn-hapus" onclick="hapus(${index})">Hapus</button></td>
+        </tr>
+        `;
+    });
+
+    document.getElementById("tabel").innerHTML = html;
+}
+
+function hapus(index) {
+    data.riwayat.splice(index, 1);
+    simpan();
+    update();
+}
+
+function resetData() {
+    if (confirm("Yakin reset semua data?")) {
+        localStorage.removeItem("storaData");
+        location.reload();
+    }
+}
+function logout() {
+    alert("Logout berhasil!");
+    localStorage.removeItem("storaData");
+    location.reload();
+}
+
+update();
+</script>
+
+</body>
+</html>
