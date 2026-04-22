@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>About - STORA</title>
+
+<style>
+body {
+    margin: 0;
+    font-family: Arial;
+    background: #f4f6f9;
+}
+
+/* SIDEBAR */
+.sidebar {
+    position: fixed;
+    width: 220px;
+    height: 100%;
+    background: linear-gradient(to bottom, #1e3c72, #2a5298);
+    padding-top: 20px;
+    color: white;
+}
+
+.sidebar .logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    padding: 15px 20px;
+    text-decoration: none;
+}
+
+.sidebar a:hover {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    margin: 5px;
+}
+
+.sidebar a.active {
+    background: white;
+    color: #2a5298;
+    border-radius: 10px;
+    margin: 5px;
+}
+
+/* KONTEN */
+.container {
+    margin-left: 240px;
+    padding: 20px;
+}
+
+header {
+    margin-left: 240px;
+    background: #314a65;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+/* ISI ABOUT */
+.about-box {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2 class="logo">STORA</h2>
+
+    <a href="dashboard.html">Dashboard</a>
+    <a href="input.html">Input</a>
+    <a href="monitoring.html">Monitoring</a>
+    <a href="about.html" class="active">About Us</a>
+    <a href="javascript:void(0)" onclick="logout()">Logout</a>
+</div>
+
+<!-- HEADER -->
+<header>
+    STORA - Manajemen Pergudangan
+</header>
+
+<!-- KONTEN -->
+<div class="container">
+    <h2>About Us</h2>
+
+    <div class="about-box">
+        <p><b>STORA</b> adalah sistem manajemen pergudangan sederhana berbasis web.</p>
+
+        <p>Fitur utama:</p>
+        <ul>
+            <li>Manajemen stok barang</li>
+            <li>Pencatatan barang masuk & keluar</li>
+            <li>Riwayat transaksi</li>
+            <li>Grafik laporan</li>
+        </ul>
+
+        <p>Dibuat untuk membantu pengelolaan data gudang secara mudah dan cepat.</p>
+    </div>
+    <h3>Tim Pengembang</h3>
+    <ul>
+        <li>Anri Hariani Gultom</li>
+        <li>Endang Tri Wahyuni</li>
+        <li>Devi Ikhba Zarelia</li>
+        <li>Zidan Habib Hasanuddin</li>
+        <li>Muhammad Atha Ardra</li>
+        <li>Zaky Rahmatullah</li>
+    </ul>
+</div>
+
+<script>
+function logout() {
+    localStorage.clear();
+    window.location.href = "index.html";
+}
+</script>
+
+</body>
+</html>
